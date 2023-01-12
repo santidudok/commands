@@ -17,3 +17,21 @@ Using your self-hosted runner
 
 # Use this YAML in your workflow file for each job
 runs-on: self-hosted
+
+
+
+
+For docker image building it is required that docker is installed, this can be done via a new terminal:
+sudo apt install apt-transport-https curl gnupg-agent ca-certificates software-properties-common -y
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+sudo apt install docker-ce docker-ce-cli containerd.io -y
+Now that docker is installed it is worth adding the user to the docker group so that sudo is not needed for every docker command:
+sudo usermod -aG docker $USER
+newgrp docker
+docker version
+The last command should show the version of docker installed.
+If the docker workflow has issue logging in to dockerhub, and its a permission issue, run the following command
+sudo chmod 666 /var/run/docker.sock
+FOR ALL SCRIPTS: any points on failure could be related to trying windows only actions despite the running being on ubuntu/linux so check the workflow files and consider that the issue may be caused by this. 
+One fix: replace commands that are being run which would normally not work on linux with ones that do. Example: New-Item -> mkdir
